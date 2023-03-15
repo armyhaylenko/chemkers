@@ -1,0 +1,13 @@
+$background-color: #40403e;
+$themes: (
+  classic: (
+    square-main-color: #eeeed2,
+    square-secondary-color: #8a785d,
+    piece-white-color: #eaeeed,
+    piece-black-color: #4a4e4d,
+  ),
+);
+
+@function get-theme-color($color) {
+  @return map-get(map-get($themes, classic), $color);
+}

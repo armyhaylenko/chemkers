@@ -1,0 +1,29 @@
+@import '../../../../../styles/index.scss';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include screen-md() {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.25rem;
+  }
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.customButtonWrapper {
+  display: flex;
+  gap: 0.25rem;
+}

@@ -1,0 +1,40 @@
+@import '../../../styles/index.scss';
+
+.button {
+  font-family: 'Nunito', sans-serif;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: darken($background-color, 7.5%);
+  color: #fff;
+  transition: opacity ease 0.2s;
+  &:hover {
+    opacity: 0.7;
+  }
+  gap: 0.5rem;
+  border: 2px solid $background-color;
+}
+
+.buttonSelected {
+  border: 2px solid #fff;
+}
+
+.buttonGhost {
+  background-color: transparent;
+}
+
+.buttonSecondary {
+  background-color: darken($background-color, 4%);
+}
+
+.buttonWarning {
+  background-color: #995434;
+}
+
+.buttonSmall {
+  padding: 0.5rem;
+}

@@ -1,0 +1,172 @@
+@import '../../../styles/index.scss';
+
+@mixin piece-color($color) {
+  background: radial-gradient(
+      ellipse at center,
+      $color 30%,
+      rgba(0, 0, 0, 0.2) 45%,
+      $color 47.5%,
+      rgba(0, 0, 0, 0.2) 80%,
+      $color 100%
+    ),
+    $color;
+}
+
+.square {
+  aspect-ratio: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: map-get(map-get($themes, classic), square-main-color);
+
+  @for $row from 0 through 7 {
+    @for $column from 1 through 8 {
+      &:nth-child(#{$row * 8 + $column}) {
+        @if $row % 2 == 0 {
+          @if $column % 2 == 0 {
+            background-color: map-get(
+              map-get($themes, classic),
+              square-secondary-color
+            );
+          }
+        } @else {
+          @if $column % 2 == 1 {
+            background-color: map-get(
+              map-get($themes, classic),
+              square-secondary-color
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+.squareFilled {
+  cursor: pointer;
+}
+
+.squareMoveable {
+  $size: 25%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: $size;
+    height: $size;
+    display: block;
+    background-color: map-get(map-get($themes, classic), square-main-color);
+    border-radius: 100%;
+    opacity: 0.8;
+    transition: all 0.1s ease;
+    animation: blink 2s infinite both;
+  }
+
+  &:hover {
+    &::after {
+      width: calc($size * 1.25);
+      height: calc($size * 1.25);
+    }
+  }
+}
+
+.squareIndex {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  font-size: 0.5rem;
+  user-select: none;
+  color: #0a0e0d;
+  font-family: 'Nunito', sans-serif;
+}
+
+.piece,
+.pieceBlack {
+  $size: 70%;
+
+  @media screen and (max-width: 768px) {
+    $size: 65%;
+  }
+
+  z-index: 99;
+  position: absolute;
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  @include piece-color(map-get(map-get($themes, classic), piece-white-color));
+}
+
+.squareHighlighted {
+  &::before {
+    inset: 0;
+    content: '';
+    z-index: 5;
+    position: absolute;
+    display: block;
+    opacity: 0.3;
+    background-color: aquamarine !important;
+  }
+}
+
+.squareSelected {
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: 10;
+    inset: 0.15rem;
+    border: 0.2rem solid map-get(map-get($themes, classic), square-main-color);
+    opacity: 0.8;
+    animation: blink 2s infinite both;
+
+    @include screen-md() {
+      inset: 0.2rem;
+      border: 0.25rem solid
+        map-get(map-get($themes, classic), square-main-color);
+    }
+
+    @include screen-lg() {
+      inset: 0.25rem;
+      border: 0.3rem solid map-get(map-get($themes, classic), square-main-color);
+    }
+  }
+}
+
+.pieceKingIcon {
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 2vh;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.75vh;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 1.25vh;
+  }
+}
+
+.pieceBlack {
+  @include piece-color(map-get(map-get($themes, classic), piece-black-color));
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "wasm-checkers",
+  "author": "Toms Zvirbulis (tomszvirbulis3@gmail.com)",
+  "description": "Rust WebAssembly library for handling checkers game board logic and computer move-generation.",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "pkg/wasm_checkers_bg.wasm.d.ts",
+    "pkg/wasm_checkers_bg.wasm",
+    "pkg/wasm_checkers.js",
+    "pkg/wasm_checkers.d.ts"
+  ],
+  "main": "pkg/wasm_checkers.js",
+  "types": "pkg/wasm_checkers.d.ts",
+  "scripts": {
+    "test": "cargo test",
+    "dev": "cargo-watch -i .gitignore -i \"pkg/*\" -s \"yarn build\"",
+    "build": "wasm-pack build --target web"
+  }
+}

@@ -1,0 +1,40 @@
+@import 'vendor/reset.scss';
+@import 'colors.scss';
+@import 'breakpoints.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+}
+
+p {
+  line-height: 1.4rem;
+}
+
+a {
+  color: get-theme-color(square-main-color);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.description {
+  color: #c3c3c3;
+  font-size: 0.8rem;
+}
+
+body,
+html,
+#root {
+  height: 100%;
+  background-color: $background-color;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Poppins', sans-serif;
+}

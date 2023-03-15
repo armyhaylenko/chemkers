@@ -1,73 +1,117 @@
-# Turborepo starter
+# Chemkers
 
-This is an official Yarn (Berry) starter turborepo.
+A live version of the app can be found here: https://tomszir.github.io/chemkers
 
-## What's inside?
+## Description
 
-This turborepo uses [Yarn](https://yarnpkg.com/) as a package manager. It includes the following packages/apps:
+A Checkers game made as a university project (but mostly for fun).
 
-### Apps and Packages
+## Development & project setup
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+### Installing project requirements
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- Node.js: https://nodejs.org/en
+- The Rust programming language
+  - The project heavily relies on Rust to handle all computationally intensive operations.
+  - Recommended cross-platform installer: https://rustup.rs/
+- wasm-pack
+  - A workflow tool for compiling `rust -> wasm`, otherwise it wouldn't be easily possible to use Rust compiled WebAssembly within the project.
+  - Recommended cross-platform installer: https://rustwasm.github.io/wasm-pack/installer/
 
-### Utilities
+> The only tested versions of these are - `node@v14.19.0`, `rustc@1.68.0`, `wasm-pack@0.10.3`. I can't guarantee everything will work with any other version.
 
-This turborepo has some additional tools already setup for you:
+### Setting up the project
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+Clone the project and navigate to it
 
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run build
+```bash
+git clone https://github.com/tomszir/chemkers
+cd ./chemkers
 ```
 
-### Develop
+If you don't have Yarn already installed, install it using this command
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run dev
+```bash
+npm install -g yarn
 ```
 
-### Remote Caching
+Use the stable version of Yarn and install all the project's libraries
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-yarn dlx turbo login
+```bash
+yarn set version stable
+yarn install
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Try running a test build of the project to see if everything works
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
+> You'll know if it works if you don't get a million errors in your face
 
+```bash
+yarn build
 ```
-yarn dlx turbo link
+
+### Running a development server
+
+If you're going to be working with Rust installing `cargo-watch` is a must. It will automatically watch for changes within the Rust sub-projects and rebuild the WebAssembly for immediate availability on the development server.
+
+```bash
+cargo install cargo-watch
 ```
 
-## Useful Links
+Within the root of the project run this command
 
-Learn more about the power of Turborepo:
+```bash
+yarn dev
+```
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+A development server should open to something simliar to http://localhost:5173
+
+> Note: The port can change depending on if the port is already taken or not
+
+### Project structure
+
+This project uses [Turborepo](https://turbo.build/) for handling multiple interlinked codebases.
+
+#### Turborepo workspaces
+
+| Name                                       | Description                              | Type      |
+| ------------------------------------------ | ---------------------------------------- | --------- |
+| [preact-checkers](./apps/preact-checkers/)        | Vite Preact front-end                    | `app`     |
+| [wasm-checkers](./packages/wasm-checkers/) | Rust WebAssembly checkers engine library | `package` |
+
+### Additional good-to-know things
+
+#### 1. Making `rust-analyzer` discover Rust sub-projects in VSCode
+
+To make the VSCode `rust-analyzer` extension discover the `wasm-checkers` package, please create an additional file - `.vscode/settings.json` and specify the path to the Rust `Cargo.toml` file of the package within it:
+
+```json
+{
+  "rust-analyzer.linkedProjects": [
+    "${workspaceFolder}/packages/wasm-checkers/Cargo.toml"
+  ]
+}
+```
+
+> Note: This will only make `rust-analyzer` work if VSCode is opened on the root directory of the project. (You can also open the Rust sub-project seperately and it should work automatically)
+
+#### 2. Turborepo development server hangs the terminal
+
+When running `Ctrl + C` within a terminal with an active `yarn dev` development server running Turborepo sometimes doesn't gracefully shutdown and hangs the current active terminal session. To fix this I reccomend opening another terminal instance.
+
+## Acknowledgements and research sources
+
+This project wouldn't be possible without these online resources and articles.
+
+- [English draughts, by Wikipedia - The Free Encyclopedia](https://en.wikipedia.org/wiki/English_draughts)
+- [Minimax, by Wikipedia - The Free Encyclopedia](https://en.wikipedia.org/wiki/Minimax)
+- [Alpha-beta pruning, by Wikipedia - The Free Encyclopedia](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
+- [Checkers Bitboard Tutorial, by Jonathan Kreuzer](https://3dkingdoms.com/checkers/bitboards.htm)
+- [Alpha-Beta Pruning and Checkers, By Dave Evans and Carl Sable](http://www.cs.columbia.edu/~devans/TIC/AB.html)
+- [Solving Checkers, by J. Schaeffer, Y. Bjornsson, N. Burch, A. Kishimoto, M. Muller, R. Lake, P. Lu and S. Sutphe](https://webdocs.cs.ualberta.ca/~mmueller/ps/ijcai05checkers.pdf)
+- [How to play checkers and win 90% of the time. Win with 13 basic strategies and secrets., by WinningCheckers](https://www.youtube.com/watch?v=q3aAsoM6HO0)
+- [How to use Web Workers with React and Vite, by Francisco Mendes](https://dev.to/franciscomendes10866/how-to-use-service-workers-with-react-17p2)
+
+## License
+
+This project is licensed under the [MIT](./LICENSE) license.
