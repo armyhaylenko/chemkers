@@ -1,38 +1,36 @@
 import { Board, Color, Move } from 'wasm-checkers';
-import { CheckersGameSettings } from '../../types';
 
 export type BoardContextState = {
   board: Board;
   gameStarted: boolean;
   currentTurn: number;
-  currentEvaluation: number;
   currentColorToMove: Color;
   moveHistory: Move[];
   playerMoves: Move[];
+	playerPieces: number;
+	opponentPieces: number;
   startTime: Date;
   endTime: Date;
   moveUpdate: boolean;
-  gameSettings: CheckersGameSettings;
+  playerColor: Color,
+  opponentColor: Color,
 };
 
 export enum BoardContextActionType {
   INIT_BOARD = 'INIT_BOARD',
   START_GAME = 'START_GAME',
   END_GAME = 'END_GAME',
-  UPDATE_GAME_SETTINGS = 'UPDATE_GAME_SETTINGS',
   UPDATE_PLAYER_MOVES = 'UPDATE_PLAYER_MOVES',
   MAKE_MOVE = 'MAKE_MOVE',
-  ADVANCE_TURN = 'ADVANCE_TURN',
+	SET_BOARD_FROM_JSON = 'SET_BOARD_FROM_JSON',
 }
 
 export type BoardContextInitBoardAction = {
   type: BoardContextActionType.INIT_BOARD;
-  payload: null;
-};
-
-export type BoardContextUpdateGameSettingsAction = {
-  type: BoardContextActionType.UPDATE_GAME_SETTINGS;
-  payload: Partial<CheckersGameSettings>;
+  payload: {
+		playerColor: Color,
+		opponentColor: Color,
+	};
 };
 
 export type BoardContextStartGameAction = {
@@ -55,16 +53,15 @@ export type BoardContextMakeMoveAction = {
   payload: Move;
 };
 
-export type BoardContextAdvanceTurnAction = {
-  type: BoardContextActionType.ADVANCE_TURN;
-  payload: null;
+export type BoardContextSetBoardFromJsonAction = {
+  type: BoardContextActionType.SET_BOARD_FROM_JSON;
+  payload: string;
 };
 
 export type BoardContextAction =
   | BoardContextInitBoardAction
   | BoardContextStartGameAction
   | BoardContextEndGameAction
-  | BoardContextUpdateGameSettingsAction
   | BoardContextUpdatePlayerMovesAction
   | BoardContextMakeMoveAction
-  | BoardContextAdvanceTurnAction;
+  | BoardContextSetBoardFromJsonAction;

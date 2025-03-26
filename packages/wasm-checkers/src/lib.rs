@@ -1,13 +1,9 @@
-pub mod ai;
 pub mod bitboard;
 pub mod board;
 pub mod board_move;
 pub mod constants;
-pub mod heuristic;
 pub mod move_generation;
 pub mod move_util;
-pub mod settings;
-pub mod util;
 
 use std::panic;
 use wasm_bindgen::prelude::wasm_bindgen;

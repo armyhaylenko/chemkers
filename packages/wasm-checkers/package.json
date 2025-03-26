@@ -1,8 +1,6 @@
 {
   "private": true,
   "name": "wasm-checkers",
-  "author": "Toms Zvirbulis (tomszvirbulis3@gmail.com)",
-  "description": "Rust WebAssembly library for handling checkers game board logic and computer move-generation.",
   "version": "0.0.0",
   "type": "module",
   "files": [

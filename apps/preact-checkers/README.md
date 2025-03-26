@@ -1,3 +1,0 @@
-# preact-checkers
-
-TODO

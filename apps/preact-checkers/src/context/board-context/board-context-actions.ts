@@ -1,17 +1,16 @@
 import {
-  BoardContextAdvanceTurnAction,
   BoardContextEndGameAction,
   BoardContextMakeMoveAction,
+  BoardContextSetBoardFromJsonAction,
   BoardContextStartGameAction,
-  BoardContextUpdateGameSettingsAction,
   BoardContextUpdatePlayerMovesAction,
 } from './board-context-types';
 import { BoardContextInitBoardAction, BoardContextActionType } from '.';
 
-export const initBoardAction = (): BoardContextInitBoardAction => {
+export const initBoardAction = (payload: BoardContextInitBoardAction['payload']): BoardContextInitBoardAction => {
   return {
     type: BoardContextActionType.INIT_BOARD,
-    payload: null,
+    payload,
   };
 };
 
@@ -26,15 +25,6 @@ export const endGame = (): BoardContextEndGameAction => {
   return {
     type: BoardContextActionType.END_GAME,
     payload: null,
-  };
-};
-
-export const updateGameSettings = (
-  payload: BoardContextUpdateGameSettingsAction['payload']
-): BoardContextUpdateGameSettingsAction => {
-  return {
-    type: BoardContextActionType.UPDATE_GAME_SETTINGS,
-    payload,
   };
 };
 
@@ -54,9 +44,8 @@ export const makeMove = (
   };
 };
 
-export const advanceTurn = (): BoardContextAdvanceTurnAction => {
-  return {
-    type: BoardContextActionType.ADVANCE_TURN,
-    payload: null,
-  };
-};
+export const setBoardFromJson = (boardJson: string): BoardContextSetBoardFromJsonAction => ({
+  type: BoardContextActionType.SET_BOARD_FROM_JSON,
+  payload: boardJson,
+});
+

@@ -1,4 +1,4 @@
-import { Color, Board, MoveGenerator, CheckersAi } from 'wasm-checkers';
+import { Color, Board, MoveGenerator, Move } from 'wasm-checkers';
 import { getInitialBoardState } from './board-context';
 import {
   BoardContextAction,
@@ -14,37 +14,30 @@ export const boardContextReducer = (
 
   switch (type) {
     case BoardContextActionType.INIT_BOARD: {
-      return getInitialBoardState();
+      const initialState = getInitialBoardState();
+      return {
+        ...initialState,
+        playerColor: payload.playerColor,
+        opponentColor: payload.opponentColor,
+      };
     }
     case BoardContextActionType.START_GAME: {
-      const playerColor =
-        state.gameSettings.playerColor === Color.Empty
-          ? Math.floor(Math.random() * 2 + 1)
-          : state.gameSettings.playerColor;
       const opponentColor =
-        playerColor == Color.White ? Color.Black : Color.White;
+        state.playerColor === Color.White ? Color.Black : Color.White;
 
       return {
         ...state,
         startTime: new Date(),
         gameStarted: true,
-        gameSettings: { ...state.gameSettings, playerColor, opponentColor },
+        opponentColor,
       };
     }
     case BoardContextActionType.END_GAME: {
       return { ...state, endTime: new Date(), gameStarted: false };
     }
-    case BoardContextActionType.UPDATE_GAME_SETTINGS: {
-      const gameSettings = payload;
-
-      return {
-        ...state,
-        gameSettings: { ...state.gameSettings, ...gameSettings },
-      };
-    }
     case BoardContextActionType.UPDATE_PLAYER_MOVES: {
       const previousMove = state.moveHistory.reverse().find((move) => {
-        return move.moved_piece.color == state.gameSettings.playerColor;
+        return move.moved_piece.color === state.playerColor;
       });
       const forcedPlayerMoves = previousMove?.get_forced_moves_js() || [];
 
@@ -54,8 +47,7 @@ export const boardContextReducer = (
 
       const playerMoves = MoveGenerator.get_valid_moves_js(
         state.board as Board,
-        state.gameSettings.playerColor,
-        state.gameSettings.checkersSettings
+        state.playerColor
       );
 
       return { ...state, playerMoves };
@@ -66,11 +58,6 @@ export const boardContextReducer = (
 
       board.handle_move(move);
 
-      const currentEvaluation = CheckersAi.get_heuristic_value_js(
-        board,
-        state.gameSettings.checkersSettings
-      );
-
       if ((move.get_forced_moves_js() || []).length > 0) {
         return {
           ...state,
@@ -80,17 +67,31 @@ export const boardContextReducer = (
       }
 
       const currentColorToMove =
-        state.currentColorToMove == Color.White ? Color.Black : Color.White;
+        state.currentColorToMove === Color.White ? Color.Black : Color.White;
       const currentTurn = state.currentTurn + 1;
 
       return {
         ...state,
         board,
-        currentEvaluation,
         currentTurn,
         currentColorToMove,
         moveUpdate: !state.moveUpdate,
         moveHistory: [...state.moveHistory, move],
+      };
+    }
+
+    case 'SET_BOARD_FROM_JSON': {
+      const { board, moveHistory } = JSON.parse(action.payload);
+      const newBoard = Board.from_json(board);
+      const currentColorToMove =
+        state.currentColorToMove === Color.White ? Color.Black : Color.White;
+      const currentTurn = state.currentTurn + 1;
+      return {
+        ...state,
+        board: newBoard,
+        moveHistory: (moveHistory as string[]).map((m) => Move.from_json(m)),
+        currentColorToMove,
+        currentTurn,
       };
     }
     default: {

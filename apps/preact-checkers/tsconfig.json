@@ -17,6 +17,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   },
-  "include": ["src", "jest.config.cjs"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

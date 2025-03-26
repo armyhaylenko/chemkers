@@ -1,12 +1,28 @@
 @import '../../../styles/index.scss';
 
-.board {
-  height: auto;
+.container {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.board {
+  width: 85%;
   aspect-ratio: 1;
   background-color: map-get(map-get($themes, classic), square-secondary-color);
   display: grid;
   grid-template-rows: repeat(8, 1fr);
   grid-template-columns: repeat(8, 1fr);
   box-shadow: 0 0 2rem 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.endTurn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
 }

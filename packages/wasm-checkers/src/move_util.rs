@@ -1,13 +1,12 @@
 use crate::{
     bitboard::Bitboard,
     constants::{Color, MoveDiagonals, MoveType, Piece},
-    settings::{CheckersSetting, CheckersSettings},
 };
 
 pub struct MoveUtil;
 
 impl MoveUtil {
-    pub fn get_move_diagonals(piece: Piece, move_type: MoveType, settings: u16) -> Vec<i16> {
+    pub fn get_move_diagonals(piece: Piece) -> Vec<i16> {
         let every_diagonal = vec![
             MoveDiagonals::NORTH_WEST,
             MoveDiagonals::NORTH_EAST,
@@ -17,15 +16,6 @@ impl MoveUtil {
 
         if piece.king {
             return every_diagonal;
-        }
-
-        match move_type {
-            MoveType::Attack => {
-                if CheckersSettings::contains(settings, CheckersSetting::RegularCaptureBackwards) {
-                    return every_diagonal;
-                }
-            }
-            _ => {}
         }
 
         match piece.color {
@@ -100,12 +90,11 @@ impl MoveUtil {
     pub fn get_capture_end_squares(
         bitboard: &Bitboard,
         move_type: MoveType,
-        settings: u16,
         piece: Piece,
         square: u16,
         diagonal: i16,
     ) -> Vec<(u16, u16)> {
-        if !CheckersSettings::contains(settings, CheckersSetting::FlyingKings) || !piece.king {
+        if !piece.king {
             return match move_type {
                 MoveType::Advance => vec![(square, (square as i16 + diagonal) as u16)],
                 MoveType::Attack => vec![(

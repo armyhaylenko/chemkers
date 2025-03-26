@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "double-ratchet",
+  "description": "JS bindings for double ratchet encryption algorithm",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "pkg/double_ratchet_bg.wasm.d.ts",
+    "pkg/double_ratchet_bg.wasm",
+    "pkg/double_ratchet.js",
+    "pkg/double_ratchet.d.ts"
+  ],
+  "main": "pkg/double_ratchet.js",
+  "types": "pkg/double_ratchet.d.ts",
+  "scripts": {
+    "build": "wasm-pack build --target web"
+  }
+}

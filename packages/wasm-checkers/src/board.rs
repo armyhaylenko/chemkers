@@ -65,7 +65,7 @@ impl Board {
     }
 
     #[wasm_bindgen]
-    pub fn is_game_over(&self, settings: u16) -> bool {
+    pub fn is_game_over(&self) -> bool {
         let white_pieces = self.bitboard.get_white();
         let black_pieces = self.bitboard.get_black();
 
@@ -73,8 +73,8 @@ impl Board {
             return true;
         }
 
-        let white_moves = MoveGenerator::get_valid_moves(&self.bitboard, Color::White, settings);
-        let black_moves = MoveGenerator::get_valid_moves(&self.bitboard, Color::Black, settings);
+        let white_moves = MoveGenerator::get_valid_moves(&self.bitboard, Color::White);
+        let black_moves = MoveGenerator::get_valid_moves(&self.bitboard, Color::Black);
 
         if white_moves.len() == 0 || black_moves.len() == 0 {
             return true;

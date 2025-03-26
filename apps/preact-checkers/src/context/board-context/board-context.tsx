@@ -2,8 +2,6 @@ import { ComponentChildren, createContext } from 'preact';
 import { useReducer } from 'preact/hooks';
 import {
   Board,
-  CheckersSettingPreset,
-  CheckersSettings,
   Color,
 } from 'wasm-checkers';
 import { boardContextReducer } from './board-context-reducer';
@@ -15,19 +13,14 @@ export const getInitialBoardState: () => BoardContextState = () => ({
   moveHistory: [],
   playerMoves: [],
   currentTurn: 0,
-  currentEvaluation: 0,
+	playerPieces: 8,
+	opponentPieces: 8,
   currentColorToMove: Color.White,
   startTime: new Date(),
   endTime: new Date(),
   moveUpdate: false,
-  gameSettings: {
-    playerColor: Color.White,
-    opponentColor: Color.Black,
-    computerDepth: 5,
-    checkersSettings: CheckersSettings.from_preset(
-      CheckersSettingPreset.RussianVariation
-    ),
-  },
+  playerColor: Color.White,
+  opponentColor: Color.Black,
 });
 
 export const BoardContext = createContext<BoardContextState | null>(null);

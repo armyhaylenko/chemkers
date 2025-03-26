@@ -4,8 +4,11 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use crate::{
     board_move::Move,
     constants::{Color, Piece},
-    util::BitUtil,
 };
+
+fn is_bit_set(number: u64, index: u16) -> bool {
+    (number & (1_u64 << index)) != 0
+}
 
 #[wasm_bindgen]
 #[derive(Copy, Clone, Serialize, Deserialize)]
@@ -23,21 +26,21 @@ impl Bitboard {
     }
 
     pub fn is_occupied(&self, square: u16) -> bool {
-        BitUtil::is_set(self.get_occupied(), square)
+        is_bit_set(self.get_occupied(), square)
     }
 
     pub fn is_color_occupied(&self, color: Color, square: u16) -> bool {
         match color {
-            Color::White => BitUtil::is_set(self.get_white(), square),
-            Color::Black => BitUtil::is_set(self.get_black(), square),
+            Color::White => is_bit_set(self.get_white(), square),
+            Color::Black => is_bit_set(self.get_black(), square),
             _ => false,
         }
     }
 
     pub fn is_color_king(&self, color: Color, square: u16) -> bool {
         match color {
-            Color::White => BitUtil::is_set(self.get_white_king(), square),
-            Color::Black => BitUtil::is_set(self.get_black_king(), square),
+            Color::White => is_bit_set(self.get_white_king(), square),
+            Color::Black => is_bit_set(self.get_black_king(), square),
             _ => false,
         }
     }
@@ -71,13 +74,13 @@ impl Bitboard {
     }
 
     pub fn get_piece(&self, square: u16) -> Option<Piece> {
-        if BitUtil::is_set(self.get_white(), square) {
+        if is_bit_set(self.get_white(), square) {
             let color = Color::White;
             let king = self.is_color_king(color, square);
             return Some(Piece { color, king });
         }
 
-        if BitUtil::is_set(self.get_black(), square) {
+        if is_bit_set(self.get_black(), square) {
             let color = Color::Black;
             let king = self.is_color_king(color, square);
             return Some(Piece { color, king });
